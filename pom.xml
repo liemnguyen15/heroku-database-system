@@ -46,6 +46,9 @@
                   <workerType>Micro</workerType>
                   <region>us-east-1</region>
                   <objectStoreV2>true</objectStoreV2>
+                  <properties>
+                  	<api.id>16377647</api.id>
+                  </properties>
                	</cloudHubDeployment>
 				</configuration>
 			</plugin>
