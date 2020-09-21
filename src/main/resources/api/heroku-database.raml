@@ -1,0 +1,53 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/9549f593-2f90-416e-9dbd-f3ac11baee42/ # 
+title: Heroku-Database
+
+description: "This system API exposes the operations needed to integrate with Heroku PostgreSQL database."
+
+mediaType:
+  - application/json
+  
+securitySchemes:
+  basic: !include exchange_modules/e3626c4b-1fb7-4e09-be39-c1b97ff7e66b/client-basic-auth/1.0.0/client-basic-auth.raml
+
+traits: 
+  accept-required: !include exchange_modules/e3626c4b-1fb7-4e09-be39-c1b97ff7e66b/common-traits/1.0.0/accept-required.raml
+  content-type-required: !include exchange_modules/e3626c4b-1fb7-4e09-be39-c1b97ff7e66b/common-traits/1.0.0/content-type-required.raml
+  standard-error-responses: !include exchange_modules/e3626c4b-1fb7-4e09-be39-c1b97ff7e66b/common-traits/1.0.0/error-responses.raml
+
+/ping:
+  get:
+    is: [standard-error-responses]
+    securedBy: [basic]
+    description: Return a standard response.
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/get-response.json 
+
+/query:
+  post:
+    is: [standard-error-responses]
+    securedBy: [basic]
+    body:
+      description: "Any select query execution against Heroku database"
+      example: !include examples/query_request.json
+    responses:
+      "200": 
+        body:
+          application/json:
+            example: !include examples/query_response.json
+
+/common_stocks:
+  post:
+    is: [standard-error-responses]
+    securedBy: [basic]
+    body:
+      description: "Any insert execution against Heroku database"
+      example: !include examples/common_stocks_request.json
+    responses:
+      "200": 
+        body:
+          application/json:
+            example: !include examples/common_stocks_response.json

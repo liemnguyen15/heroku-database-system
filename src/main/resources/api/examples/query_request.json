@@ -1,0 +1,3 @@
+{
+  "queryString": "SELECT * FROM common_stocks"
+}

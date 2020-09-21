@@ -1,0 +1,71 @@
+#%RAML 1.0 Trait
+  responses:
+      400:
+        description:
+          The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).
+        body:
+          application/json:
+      401:
+        description:
+          The supplied credentials are invalid.
+        body:
+          application/json:
+      403:
+        description:
+          There is a problem with the credentials that were provided.
+      404:
+        description:
+          The server cannot find the requested resource.
+        body:
+          application/json:
+            example: |
+              {  "status": "404", "message": "Resource not found" }
+      405:
+        description:
+          A request was made of a resource using a request method not supported by that resource; for example, using GET on a form which requires data to be presented via POST, or using PUT on a read-only resource.
+        body:
+          application/json: 
+            example: |
+              {  "status": "405", "message": "Method not allowed" }
+      406:
+        description:
+          The target resource does not have a current representation that would be acceptable to the user agent.
+        body:
+          application/json:
+            example: |
+              {  "status": "406", "message": "Not acceptable" }
+      415:
+        description:
+          The accept header specified an unsupported media type.
+        body:
+          application/json: 
+            example: |
+              {  "status": "415", "message": "Unsupported media type" }
+      500:
+        description:
+          An internal processing error occurred while processing the API request.
+        body:
+          application/json:
+            example: |
+              { "status": "500", "message": "Internal Server Error" }
+      597:
+        description:
+          Experience API timeout during dependent service invocation.
+        body:
+          application/json:
+            example: |
+              { "status": "597", "message": "Experience API Dependent Service Timeout" }
+      598:
+        description:
+          Process API timeout during dependent service invocation.
+        body:
+          application/json:
+            example: |
+              { "status": "598", "message": "Process API Dependent Service Timeout" }
+      599:
+        description:
+          System API timeout during dependent service invocation.
+        body:
+          application/json:
+            example: |
+              { "status": "599", "message": "System API Dependent Service Timeout" }
