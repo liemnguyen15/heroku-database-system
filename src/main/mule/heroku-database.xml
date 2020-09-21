@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
     <flow name="heroku-database-main">
         <http:listener path="/api/*" config-ref="httpListenerConfig">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -133,7 +134,7 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
-    <flow name="post:\common_stocks:application\json:heroku-database-config">
+    <flow name="post:\common_stocks:application\json:heroku-database-config" tracking:enable-default-events="true">
         <ee:transform doc:name="Transform Message" doc:id="2b8932a4-5e9e-4a60-9532-0a817ac45565" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -162,7 +163,7 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
-    <flow name="post:\query:application\json:heroku-database-config">
+    <flow name="post:\query:application\json:heroku-database-config" tracking:enable-default-events="true">
         <choice doc:name="Choice" doc:id="c5fc67ca-cbe9-4911-bd70-5ca4df20abde" >
 			<when expression="#[payload.queryString != null]">
 				<until-successful maxRetries="2" doc:name="Until Successful" doc:id="f66de18a-1014-407a-9fc4-e9493ac5fb46" millisBetweenRetries="10000">
@@ -187,4 +188,28 @@ output application/json
 			</otherwise>
 		</choice>
     </flow>
+	<flow name="post:\delete:application\json:heroku-database-config" doc:id="5294cbf4-8679-4ed0-b370-6eff4fbaf914" tracking:enable-default-events="true">
+		<choice doc:name="Choice" doc:id="9a3297ec-e6f8-4ff4-b3a2-1fae972708f3" >
+			<when expression="#[payload.queryString != null]" >
+				<until-successful maxRetries="2" doc:name="Until Successful" doc:id="1e98928e-5257-48f9-8079-8f0f2a76d1db" millisBetweenRetries="10000">
+					<db:delete doc:name="Delete" doc:id="7810b90a-a5c5-4140-a678-aa7dc90d6f5a" config-ref="Database_Config(HEROKU)">
+						<db:sql ><![CDATA[#[payload.queryString]]]></db:sql>
+					</db:delete>
+				</until-successful>
+				<ee:transform doc:name="Transform Message" doc:id="81590e64-b235-4893-9f2c-03502cf19daf" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  message: "Data Deletion Successful"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<raise-error doc:name="Raise error" doc:id="2a8b39b7-4696-4cab-803c-3161f9566a23" type="QUERY: MISSING" description='#["Query string is missing in request!"]' />
+			</otherwise>
+		</choice>
+	</flow>
 </mule>

@@ -22,6 +22,6 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 	<http:listener-config name="httpListenerConfig" doc:name="HTTP Listener config" doc:id="439e0596-33c7-4c41-b7b8-fb3527d19446" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>	
-    <apikit:config name="heroku-database-config" api="api/heroku-database.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" /> 
+    <apikit:config name="heroku-database-config" api="api/heroku-database.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />  
 	<api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="28c35d62-7802-4083-a4d4-727641cc6ff5" flowRef="heroku-database-main"/>
 	</mule>

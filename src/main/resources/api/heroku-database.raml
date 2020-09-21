@@ -51,3 +51,16 @@ traits:
         body:
           application/json:
             example: !include examples/common_stocks_response.json
+
+/delete:
+  post:
+    is: [standard-error-responses]
+    securedBy: [basic]
+    body:
+      description: "Any select query execution against Heroku database"
+      example: !include examples/query_request.json
+    responses:
+      "200": 
+        body:
+          application/json:
+            example: !include examples/delete_response.json
