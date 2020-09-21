@@ -46,6 +46,13 @@
                   <workerType>Micro</workerType>
                   <region>us-east-1</region>
                   <objectStoreV2>true</objectStoreV2>
+                  <properties>
+                  	<api.id>${api.id}</api.id>
+                  	<anypoint.platform.client_id>b7a848a69dcd4952b66e08497b2e560d</anypoint.platform.client_id>
+                  	<anypoint.platform.client_secret>8de6D53F2F094a519e5833Bfe93F7407</anypoint.platform.client_secret>
+                  	<anypoint.platform.base_uri>https://anypoint.mulesoft.com</anypoint.platform.base_uri>
+                  	<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
+                  </properties>
                	</cloudHubDeployment>
 				</configuration>
 			</plugin>
